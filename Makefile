@@ -23,7 +23,10 @@ utest:
 cov:
 	open htmlcov/index.html
 
-serving:
+train:
+	cd src/ml && python train.py
+
+backend:
 	PYTHONPATH=src uvicorn src.backend:app --reload
 
 frontend:

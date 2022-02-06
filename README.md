@@ -9,14 +9,10 @@ $ make setup    # initial setup for the project
 
 ## How to Play
 ```bash
-$ make serving      # start up the server
+$ make train        # train conv net (optional)
+$ make backend      # start up the server
 $ make frontend     # start up frontend (draw board)
-$ make inference    # send a sample image file to the server
 ```
-
-## Training Conv Net with MNIST
-1. Go to `src/ml`
-2. Run `python train.py`
 
 ## For Developers
 ```bash
