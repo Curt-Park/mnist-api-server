@@ -21,15 +21,11 @@ model.eval()
 # img preprocessor
 transform = get_preprocessor()
 
-st.title("My Digit Recognizer")
-st.markdown(
-    """
-Try to write a digit!
-"""
-)
+st.title("Digit Recognizer")
+st.markdown("Try to write a digit! (0 ~ 9)")
 
 SIZE = 192
-mode = st.checkbox("Draw (or Delete)?", True)
+mode = st.checkbox("☑ - freedraw  |  ☐ - transform", True)
 CanvasResult = st_canvas(
     fill_color="#000000",
     stroke_width=20,
