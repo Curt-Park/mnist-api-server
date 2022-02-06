@@ -1,3 +1,6 @@
+# MNIST API Server
+MNIST inference server w/ FastAPI
+
 ## File Structure
 ```bash
 .
