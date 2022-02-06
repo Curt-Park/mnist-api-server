@@ -79,7 +79,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--save-model",
         action="store_true",
-        default=False,
+        default=True,
         help="For Saving the current Model",
     )
     args = parser.parse_args()
