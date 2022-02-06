@@ -1,7 +1,10 @@
-## Training Conv Net with MNIST
+# MNIST API Server
+MNIST inference server w/ FastAPI
 
+## Training Conv Net with MNIST
 1. Go to `src/ml`
 2. Run `python train.py`
+
 
 ## File Structure
 ```bash
