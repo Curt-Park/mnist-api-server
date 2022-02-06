@@ -8,18 +8,21 @@ This script is a little modified from:
 """
 
 
+import json
+import os
+import urllib
+
 import cv2
+import requests
 import streamlit as st
-import torch
 from streamlit_drawable_canvas import st_canvas
 
-from ml.data import get_preprocessor
+if os.environ.get("BACKEND_URL") is not None:
+    BACKEND_URL = str(os.environ.get("BACKEND_URL"))
+else:
+    BACKEND_URL = "http://localhost:8000"
+PREDICT_URL = urllib.parse.urljoin(BACKEND_URL, "predict")
 
-model = torch.jit.load("mnist_cnn.pt")
-model.eval()
-
-# img preprocessor
-transform = get_preprocessor()
 
 st.title("Digit Recognizer")
 st.markdown("Try to write a digit! (0 ~ 9)")
@@ -44,7 +47,19 @@ if CanvasResult.image_data is not None:
     st.image(rescaled)
 
 if st.button("Predict"):
-    image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    inp = torch.unsqueeze(transform(image), dim=0)
-    prediction = torch.argmax(model(inp)).item()
-    st.write(f"result: {prediction}")
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    try:
+        response_predict = requests.post(
+            url=PREDICT_URL,
+            data=json.dumps({"input_image": img.tolist()}),
+        )
+
+        if response_predict.ok:
+            res = response_predict.json()
+            st.write(f"Prediction: {res['label']}")
+        else:
+            st.write("Some error occured")
+
+    except ConnectionError:
+        st.write("Couldn't reach backend")

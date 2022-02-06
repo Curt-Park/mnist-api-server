@@ -7,6 +7,7 @@ env:
 setup:
 	conda install --file requirements.txt -c conda-forge -c pytorch
 	pre-commit install
+	mypy --install-types
 
 format:
 	black .
@@ -23,9 +24,6 @@ cov:
 
 serving:
 	PYTHONPATH=src uvicorn src.backend:app --reload
-
-inference:
-	curl -X POST "http://127.0.0.1:8000/predict" -H  "accept: application/json" -H  "Content-Type: multipart/form-data" -F "image=@mnist_sample.jpg;type=image/jpeg"
 
 frontend:
 	PYTHONPATH=src streamlit run src/frontend.py
