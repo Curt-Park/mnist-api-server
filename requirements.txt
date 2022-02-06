@@ -24,3 +24,6 @@ pytest-cov      == 3.0.0        # coverage reports
 # ml
 pytorch         == 1.10.2
 torchvision     == 0.9.1
+
+# utils
+tqdm            == 4.62.3

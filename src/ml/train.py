@@ -19,6 +19,7 @@ from torch import optim
 from torch.optim.lr_scheduler import StepLR
 from torch.utils.data.dataloader import DataLoader
 from torchvision import datasets, transforms
+from tqdm import tqdm
 
 logging.config.fileConfig("../../logging.conf")
 logger = logging.getLogger()
@@ -117,7 +118,8 @@ def train(
 ) -> None:
     """Train the model in a single epoch."""
     model.train()
-    for batch_idx, (data, target) in enumerate(train_loader):
+    epoch = params["epoch"]
+    for data, target in tqdm(train_loader, desc=f"Train Epoch {epoch}"):
         data, target = data.to(device), target.to(device)
 
         # update
@@ -126,19 +128,6 @@ def train(
         loss = F.nll_loss(output, target)
         loss.backward()
         optimizer.step()
-
-        # skip logging
-        if batch_idx % params["log_interval"] != 0:
-            continue
-
-        logger.info(
-            "Train Epoch: %d\t[%5d/%d (%.2f%%)]\tLoss: %.4f",
-            params["epoch"],
-            batch_idx * len(data),
-            len(train_loader.dataset),
-            100 * batch_idx * len(data) / len(train_loader.dataset),
-            loss.item(),
-        )
 
 
 def test(
@@ -149,7 +138,7 @@ def test(
     test_loss = 0.0
     correct = 0
     with torch.no_grad():
-        for data, target in test_loader:
+        for data, target in tqdm(test_loader, desc="Evaluation"):
             data, target = data.to(device), target.to(device)
 
             # sum up batch loss
@@ -164,7 +153,7 @@ def test(
     test_acc = 100.0 * correct / len(test_loader.dataset)
 
     logger.info(
-        "\nTest set: Average loss: %.4f, Accuracy: %d/%d %.2f%%\n",
+        "Test set: Average loss: %.4f\tAccuracy: %d/%d (%.2f%%)",
         test_loss,
         correct,
         len(test_loader.dataset),
