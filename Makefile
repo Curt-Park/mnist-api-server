@@ -6,6 +6,7 @@ env:
 
 setup:
 	conda install --file requirements.txt -c conda-forge -c pytorch
+	pip install streamlit-drawable-canvas
 	pre-commit install
 	mypy --install-types
 
