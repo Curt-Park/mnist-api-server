@@ -10,7 +10,7 @@ This script is a little modified from:
 import argparse
 import logging
 import logging.config
-from typing import Any, Dict, Tuple
+from typing import Dict
 
 import torch
 import torch.nn.functional as F
@@ -18,8 +18,9 @@ from model import ConvNet
 from torch import optim
 from torch.optim.lr_scheduler import StepLR
 from torch.utils.data.dataloader import DataLoader
-from torchvision import datasets, transforms
 from tqdm import tqdm
+
+from data import get_dataloaders
 
 logging.config.fileConfig("../../logging.conf")
 logger = logging.getLogger()
@@ -86,29 +87,6 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-def get_dataloaders(
-    batch_size: int, test_batch_size: int, use_cuda: bool
-) -> Tuple[DataLoader, DataLoader]:
-    """Get dataloaders for training and test."""
-    # set kwargs for training and test
-    cuda_kwargs = {"num_workers": 1, "pin_memory": True, "shuffle": True}
-    train_kwargs: Dict[str, Any] = {"batch_size": batch_size}
-    test_kwargs: Dict[str, Any] = {"batch_size": test_batch_size}
-    train_kwargs.update(cuda_kwargs if use_cuda else {})
-    test_kwargs.update(cuda_kwargs if use_cuda else {})
-
-    # set dataset loaders
-    transform_seq = [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
-    transform = transforms.Compose(transform_seq)
-    data_path = "../../data"
-    dataset1 = datasets.MNIST(data_path, train=True, download=True, transform=transform)
-    dataset2 = datasets.MNIST(data_path, train=False, transform=transform)
-    train_loader = DataLoader(dataset1, **train_kwargs)
-    test_loader = DataLoader(dataset2, **test_kwargs)
-
-    return train_loader, test_loader
-
-
 def train(
     model: torch.nn.Module,
     train_loader: DataLoader,
@@ -168,20 +146,26 @@ def main() -> None:
     args = parse_args()
 
     torch.manual_seed(args.seed)
+    logger.info("Use torch seed %d", args.seed)
+
     use_cuda = not args.no_cuda and torch.cuda.is_available()
     device = torch.device("cuda" if use_cuda else "cpu")
+    logger.info("Torch device: %s", device)
 
     train_loader, test_loader = get_dataloaders(
         batch_size=args.batch_size,
         test_batch_size=args.test_batch_size,
         use_cuda=use_cuda,
     )
+    logger.info("Dataloaders created")
 
     model = ConvNet().to(device)
     optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
+    logger.info("Model and optimizer prepared")
 
     best_acc = 0.0
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
+    logger.info("Start training")
     for epoch in range(1, args.epochs + 1):
         train(
             model=model,
