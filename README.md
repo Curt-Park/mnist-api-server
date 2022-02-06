@@ -10,6 +10,7 @@ $ make setup    # initial setup for the project
 ## How to Play
 ```bash
 $ make serving      # start up the server
+$ make frontend     # start up frontend (draw board)
 $ make inference    # send a sample image file to the server
 ```
 
@@ -28,3 +29,5 @@ $ make cov      # open coverage report (after `make utest`)
 ## References
 - https://github.com/pytorch/examples/blob/master/mnist/main.py
 - https://github.com/KiLJ4EdeN/fastapi_tf-keras_example
+- https://github.com/rahulsrma26/streamlit-mnist-drawable
+- https://github.com/zademn/mnist-mlops-learning

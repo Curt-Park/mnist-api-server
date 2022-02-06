@@ -1,4 +1,11 @@
-"""A simple inferece server."""
+"""A simple inferece server.
+
+This script is a little modified from:
+    https://github.com/KiLJ4EdeN/fastapi_tf-keras_example
+
+- Author: Jinwoo Park
+- Email: www.jwpark.co.kr@gmail.com
+"""
 import io
 from typing import Dict
 

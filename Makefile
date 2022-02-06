@@ -26,3 +26,6 @@ serving:
 
 inference:
 	curl -X POST "http://127.0.0.1:8000/predict" -H  "accept: application/json" -H  "Content-Type: multipart/form-data" -F "image=@mnist_sample.jpg;type=image/jpeg"
+
+frontend:
+	PYTHONPATH=src streamlit run src/frontend.py
