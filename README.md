@@ -1,6 +1,14 @@
 # MNIST API Server
 MNIST inference server w/ FastAPI
 
+## Training Conv Net with MNIST
+1. Go to `src/ml`
+2. Run `python train.py`
+
+## References
+- https://github.com/pytorch/examples/blob/master/mnist/main.py
+
+
 ## File Structure
 ```bash
 .

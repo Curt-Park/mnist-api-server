@@ -5,7 +5,7 @@ env:
 	conda create -n $(BASENAME)  python=$(PYTHON)
 
 setup:
-	conda install --file requirements.txt -c conda-forge
+	conda install --file requirements.txt -c conda-forge -c pytorch
 	pre-commit install
 
 format:
