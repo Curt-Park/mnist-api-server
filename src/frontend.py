@@ -52,7 +52,7 @@ if st.button("Predict"):
     try:
         response_predict = requests.post(
             url=PREDICT_URL,
-            data=json.dumps({"input_image": img.tolist()}),
+            data=json.dumps({"image": img.tolist()}),
         )
 
         if response_predict.ok:
